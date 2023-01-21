@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Player } from 'src/app/models/player';
 import { PlayerService } from 'src/app/services/player.service';
 
 @Component({
@@ -7,6 +8,8 @@ import { PlayerService } from 'src/app/services/player.service';
   styleUrls: ['./player-list.component.css'],
 })
 export class PlayerListComponent implements OnInit {
+  players: Player[];
+
   constructor(private playerService: PlayerService) {}
 
   ngOnInit(): void {
@@ -15,7 +18,7 @@ export class PlayerListComponent implements OnInit {
 
   getPlayers() {
     this.playerService.getPlayers().subscribe((response) => {
-      console.log(response);
+      this.players = response;
     });
   }
 }

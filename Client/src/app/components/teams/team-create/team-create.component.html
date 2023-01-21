@@ -1,1 +1,9 @@
-<p>team-create works!</p>
+<div class="container mt-4">
+  <form [formGroup]="teamForm" (submit)="onSubmit()">
+    <div class="mb-3">
+      <label for="txtTeamName" class="form-label">Team</label>
+      <input type="text" class="form-control" id="txtTeamName" formControlName="teamName" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>

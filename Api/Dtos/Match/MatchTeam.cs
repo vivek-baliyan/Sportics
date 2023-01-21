@@ -1,4 +1,4 @@
-namespace Sportics.Api.Dtos.Match;
+namespace Api.Dtos.Match;
 
 public class MatchTeamDto
 {

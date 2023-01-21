@@ -1,7 +1,8 @@
-namespace Sportics.Api.Repository.Interface;
+namespace Api.Repository.Interface;
 
 public interface IUnitOfWork
 {
     IPlayerRepository Player { get; }
-    Task<bool> Save();
+    ITeamRepository Team { get; }
+    Task<bool> Complete();
 }

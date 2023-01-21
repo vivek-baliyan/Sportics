@@ -1,10 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Team } from 'src/app/models/team';
+import { TeamService } from 'src/app/services/team.service';
 
 @Component({
   selector: 'app-team-list',
   templateUrl: './team-list.component.html',
-  styleUrls: ['./team-list.component.css']
+  styleUrls: ['./team-list.component.css'],
 })
-export class TeamListComponent {
+export class TeamListComponent implements OnInit {
+  teams: Team[];
 
+  constructor(private teamService: TeamService) {}
+
+  ngOnInit(): void {
+    this.getTeams();
+  }
+
+  getTeams() {
+    this.teamService.getTeams().subscribe((response) => {
+      this.teams = response;
+    });
+  }
 }

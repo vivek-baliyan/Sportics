@@ -1,1 +1,26 @@
-<p>team-list works!</p>
+<div class="container mt-4">
+  <table class="table table-sm table-bordered">
+    <thead>
+      <tr>
+        <th class="text-center">#</th>
+        <th>Team</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let team of teams; let i = index">
+        <td class="text-center">{{ i + 1 }}</td>
+        <td>{{ team.teamName }}</td>
+        <td class="text-center">
+          <button
+            type="button"
+            routerLink="/team/create/{{ team.id }}"
+            class="btn btn-primary btn-sm"
+          >
+            Edit
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

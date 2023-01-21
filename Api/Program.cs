@@ -1,4 +1,4 @@
-using Sportics.Api.Extensions;
+using Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

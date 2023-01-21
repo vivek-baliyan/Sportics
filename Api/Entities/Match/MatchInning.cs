@@ -1,4 +1,4 @@
-namespace Sportics.Api.Entities.Match;
+namespace Api.Entities.Match;
 
 public class MatchInning
 {

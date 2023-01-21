@@ -1,6 +1,6 @@
-using Sportics.Api.Entities;
+using Api.Entities;
 
-namespace Sportics.Api.Repository.Interface;
+namespace Api.Repository.Interface;
 
 public interface IPlayerRepository : IRepository<Player>
 {

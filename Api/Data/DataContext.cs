@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Sportics.Api.Entities;
-using Sportics.Api.Entities.Match;
+using Api.Entities;
+using Api.Entities.Match;
 
-namespace Sportics.Api.Data;
+namespace Api.Data;
 
 public class ApplicationDbContext : DbContext
 {

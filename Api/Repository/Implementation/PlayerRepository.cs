@@ -1,10 +1,8 @@
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Sportics.Api.Data;
-using Sportics.Api.Entities;
-using Sportics.Api.Repository.Interface;
+using Api.Data;
+using Api.Entities;
+using Api.Repository.Interface;
 
-namespace Sportics.Api.Repository.Implementation;
+namespace Api.Repository.Implementation;
 
 public class PlayerRepository : Repository<Player>, IPlayerRepository
 {

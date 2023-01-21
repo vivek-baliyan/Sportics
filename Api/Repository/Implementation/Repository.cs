@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Sportics.Api.Data;
-using Sportics.Api.Repository.Interface;
+using Api.Data;
+using Api.Repository.Interface;
 
-namespace Sportics.Api.Repository.Implementation;
+namespace Api.Repository.Implementation;
 
 public class Repository<T> : IRepository<T> where T : class
 {
@@ -21,7 +21,7 @@ public class Repository<T> : IRepository<T> where T : class
         _dbSet.Add(entity);
     }
 
-    public IEnumerable<T> GetAll(string? includeroperties = null)
+    public async Task<IEnumerable<T>> GetAll(string? includeroperties = null)
     {
         IQueryable<T> query = _dbSet;
         if (includeroperties != null)
@@ -31,10 +31,10 @@ public class Repository<T> : IRepository<T> where T : class
                 query = query.Include(includeProp);
             }
         }
-        return query.ToList();
+        return await query.ToListAsync();
     }
 
-    public T? GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeroperties = null)
+    public async Task<T?> GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeroperties = null)
     {
         IQueryable<T> query = _dbSet;
         query = query.Where(filter);
@@ -45,7 +45,7 @@ public class Repository<T> : IRepository<T> where T : class
                 query = query.Include(includeProp);
             }
         }
-        return query.FirstOrDefault();
+        return await query.FirstOrDefaultAsync();
     }
 
     public void Remove(T entity)
