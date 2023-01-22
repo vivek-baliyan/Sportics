@@ -11,22 +11,22 @@ export class PlayerService {
   constructor(private http: HttpClient) {}
 
   getPlayer(id: number) {
-    return this.http.get(this.baseUrl + 'player/' + id);
+    return this.http.get<any>(this.baseUrl + 'player/' + id);
   }
 
   getPlayers() {
-    return this.http.get(this.baseUrl + 'player');
+    return this.http.get<any>(this.baseUrl + 'player');
   }
 
   createPlayer(player: Player) {
-    return this.http.post(this.baseUrl + 'player', player);
+    return this.http.post<any>(this.baseUrl + 'player', player);
   }
 
   updatePlayer(player: Player) {
-    return this.http.put(this.baseUrl + 'player', player);
+    return this.http.put<any>(this.baseUrl + 'player', player);
   }
 
   deletePlayer(id: number) {
-    return this.http.delete(this.baseUrl + 'player/' + id);
+    return this.http.delete<any>(this.baseUrl + 'player/' + id);
   }
 }

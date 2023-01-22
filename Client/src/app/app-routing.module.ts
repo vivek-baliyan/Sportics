@@ -5,12 +5,17 @@ import { PlayerCreateComponent } from './components/players/player-create/player
 import { PlayerListComponent } from './components/players/player-list/player-list.component';
 import { TeamCreateComponent } from './components/teams/team-create/team-create.component';
 import { TeamListComponent } from './components/teams/team-list/team-list.component';
+import { PlayerResolver } from './resolvers/player.resolver';
 import { TeamResolver } from './resolvers/team.resolver';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'player/create', component: PlayerCreateComponent },
-  { path: 'player/create/:id', component: PlayerCreateComponent },
+  {
+    path: 'player/create/:id',
+    component: PlayerCreateComponent,
+    resolve: { player: PlayerResolver },
+  },
   { path: 'player/list', component: PlayerListComponent },
   { path: 'team/create', component: TeamCreateComponent },
   {

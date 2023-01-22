@@ -25,7 +25,7 @@ export class TeamCreateComponent implements OnInit {
     });
 
     this.route.data.subscribe((response) => {
-      this.team = response.team.data;
+      if (Object.keys(response).length > 0) this.team = response.team.data;
       if (this.team != undefined && this.team != null) this.setTeam();
     });
   }
@@ -35,19 +35,23 @@ export class TeamCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.teamForm.valid)
+    if (this.teamForm.valid) {
       if (this.team == undefined) this.createTeam();
       else this.updateTeam();
+    }
   }
 
   createTeam() {
     this.teamService.createTeam(this.teamForm.value).subscribe((response) => {
       console.log(response);
+      this.teamForm.reset();
     });
   }
+
   updateTeam() {
     this.teamService.updateTeam(this.teamForm.value).subscribe((response) => {
       console.log(response);
+      this.teamForm.reset();
     });
   }
 }

@@ -10,15 +10,22 @@ import { PlayerService } from 'src/app/services/player.service';
 export class PlayerListComponent implements OnInit {
   players: Player[];
 
-  constructor(private playerService: PlayerService) {}
+  constructor(private PlayerService: PlayerService) {}
 
   ngOnInit(): void {
     this.getPlayers();
   }
 
   getPlayers() {
-    this.playerService.getPlayers().subscribe((response: any) => {
+    this.PlayerService.getPlayers().subscribe((response) => {
       this.players = response.data;
+    });
+  }
+
+  deletePlayer(id: number) {
+    this.PlayerService.deletePlayer(id).subscribe((response) => {
+      console.log(response.msg);
+      this.players = this.players.filter((t) => t.id !== id);
     });
   }
 }

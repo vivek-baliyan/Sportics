@@ -21,30 +21,32 @@ public class PlayerController : BaseController
     public async Task<IActionResult> GetPlayers()
     {
         var players = await _unitOfWork.Player.GetAll("Team");
-        return Ok(_mapper.Map<IEnumerable<PlayerDto>>(players));
+        return GetStatus(StatusCodes.Status200OK, string.Empty, _mapper.Map<IEnumerable<PlayerDto>>(players));
     }
 
-    [HttpGet("id")]
-    public async Task<IActionResult> GetPlayers(int id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetPlayer(int id)
     {
         var player = await _unitOfWork.Player.GetFirstOrDefault(p => p.Id == id, "Team");
-        return Ok(_mapper.Map<PlayerDto>(player));
+        if (player == null) return GetStatus(StatusCodes.Status404NotFound, $"Player with Id - {id} not found");
+
+        return GetStatus(StatusCodes.Status200OK, string.Empty, _mapper.Map<PlayerDto>(player));
     }
 
     [HttpPost]
     public async Task<IActionResult> Post(PlayerDto playerDto)
     {
-        Player player = new()
+        Player newPlayer = new()
         {
             FirstName = playerDto.FirstName,
             LastName = playerDto.LastName,
             TeamId = playerDto.TeamId
         };
-        _unitOfWork.Player.Add(player);
+        _unitOfWork.Player.Add(newPlayer);
         if (await _unitOfWork.Complete())
-            return Ok("Player saved successfully");
+            return GetStatus(StatusCodes.Status200OK, "Player saved successfully");
 
-        return BadRequest("Failed to save player");
+        return GetStatus(StatusCodes.Status400BadRequest, "Failed to save Player");
     }
 
     [HttpPut]
@@ -52,28 +54,28 @@ public class PlayerController : BaseController
     {
         var player = await _unitOfWork.Player.GetFirstOrDefault(p => p.Id == playerDto.Id);
 
-        if (player == null) return NotFound();
+        if (player == null) return GetStatus(StatusCodes.Status404NotFound, $"Player with Id - {playerDto.Id} not found");
 
-        player = _mapper.Map<Player>(playerDto);
+        _mapper.Map(playerDto, player);
 
         _unitOfWork.Player.Update(player);
         if (await _unitOfWork.Complete())
-            return Ok("Player updated successfully");
+            return GetStatus(StatusCodes.Status200OK, "Player updated successfully");
 
-        return BadRequest("Failed to updated player");
+        return GetStatus(StatusCodes.Status400BadRequest, "Failed to updated Player");
     }
 
-    [HttpPost("id")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var player = await _unitOfWork.Player.GetFirstOrDefault(p => p.Id == id);
+        var Player = await _unitOfWork.Player.GetFirstOrDefault(p => p.Id == id);
 
-        if (player == null) return NotFound();
+        if (Player == null) return GetStatus(StatusCodes.Status404NotFound, string.Empty);
 
-        _unitOfWork.Player.Remove(player);
+        _unitOfWork.Player.Remove(Player);
         if (await _unitOfWork.Complete())
-            return Ok("Player deleted successfully");
+            return GetStatus(StatusCodes.Status200OK, "Player deleted successfully");
 
-        return BadRequest("Failed to delete player");
+        return GetStatus(StatusCodes.Status400BadRequest, "Failed to delete Player");
     }
 }

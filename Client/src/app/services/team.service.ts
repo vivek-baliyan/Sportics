@@ -4,29 +4,29 @@ import { environment } from 'src/environments/environment';
 import { Team } from '../models/team';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TeamService {
   private baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) {}
 
   getTeam(id: number) {
-    return this.http.get(this.baseUrl + 'team/' + id);
+    return this.http.get<any>(this.baseUrl + 'team/' + id);
   }
 
   getTeams() {
-    return this.http.get(this.baseUrl + 'team');
+    return this.http.get<any>(this.baseUrl + 'team');
   }
 
   createTeam(team: Team) {
-    return this.http.post(this.baseUrl + 'team', team);
+    return this.http.post<any>(this.baseUrl + 'team', team);
   }
 
   updateTeam(team: Team) {
-    return this.http.put(this.baseUrl + 'team', team);
+    return this.http.put<any>(this.baseUrl + 'team', team);
   }
 
   deleteTeam(id: number) {
-    return this.http.delete(this.baseUrl + 'team/' + id);
+    return this.http.delete<any>(this.baseUrl + 'team/' + id);
   }
 }

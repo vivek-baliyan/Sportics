@@ -6,19 +6,18 @@ import {
   ActivatedRouteSnapshot,
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { Team } from '../models/team';
-import { TeamService } from '../services/team.service';
+import { PlayerService } from '../services/player.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TeamResolver implements Resolve<any> {
-  constructor(private teamService: TeamService) {}
+export class PlayerResolver implements Resolve<any> {
+  constructor(private playerService: PlayerService) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> {
-    return this.teamService.getTeam(Number(route.paramMap.get('id')));
+    return this.playerService.getPlayer(Number(route.paramMap.get('id')));
   }
 }

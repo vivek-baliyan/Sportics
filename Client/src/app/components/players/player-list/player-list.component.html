@@ -1,27 +1,30 @@
-<div class="container">
+<div class="container mt-4">
   <table class="table table-sm table-bordered">
     <thead>
       <tr>
-        <th>#</th>
+        <th class="text-center" style="width: 50px">#</th>
         <th>Player</th>
-        <th>Team</th>
-        <th></th>
+        <th class="text-center" style="width: 130px">Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let player of players; let i = index">
-        <th>{{ i + 1 }}</th>
-        <th>{{ player.firstName + " " + player.lastName }}</th>
-        <th>{{ player.teamName }}</th>
-        <th>
+        <td class="text-center">{{ i + 1 }}</td>
+        <td>{{ player.firstName + " " + player.lastName }}</td>
+        <td class="text-center">
           <button
-            type="button"
             routerLink="/player/create/{{ player.id }}"
-            class="btn btn-primary btn-sm"
+            class="btn btn-primary btn-sm mx-1"
           >
             Edit
           </button>
-        </th>
+          <button
+            class="btn btn-danger btn-sm mx-1"
+            (click)="deletePlayer(player.id)"
+          >
+            Delete
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
