@@ -1,6 +1,8 @@
 using AutoMapper;
 using Api.Dtos;
 using Api.Entities;
+using Api.Dtos.Match;
+using Api.Entities.Match;
 
 namespace Api.Helpers
 {
@@ -16,6 +18,10 @@ namespace Api.Helpers
             {
                 opts.MapFrom(src => src == null || src.Team == null || string.IsNullOrEmpty(src.Team.TeamName) ? string.Empty : src.Team.TeamName);
             });
+
+            CreateMap<Match, MatchDto>();
+            CreateMap<MatchTeam, MatchTeamDto>();
+            CreateMap<MatchInning, MatchInningDto>();
         }
     }
 }
