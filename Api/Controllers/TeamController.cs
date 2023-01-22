@@ -21,21 +21,23 @@ public class TeamController : BaseController
     public async Task<IActionResult> GetTeams()
     {
         var teams = await _unitOfWork.Team.GetAll();
-        return Ok(_mapper.Map<IEnumerable<TeamDto>>(teams));
+        return GetStatus(StatusCodes.Status200OK, string.Empty, _mapper.Map<IEnumerable<TeamDto>>(teams));
     }
 
-    [HttpGet("id")]
-    public async Task<IActionResult> GetTeams(int id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTeam(int id)
     {
         var team = await _unitOfWork.Team.GetFirstOrDefault(p => p.Id == id);
-        return Ok(_mapper.Map<TeamDto>(team));
+        if (team == null) return GetStatus(StatusCodes.Status404NotFound, $"Team with Id - {id} not found");
+
+        return GetStatus(StatusCodes.Status200OK, string.Empty, _mapper.Map<TeamDto>(team));
     }
 
     [HttpPost]
     public async Task<IActionResult> Post(TeamDto teamDto)
     {
         var team = await _unitOfWork.Team.GetFirstOrDefault(t => t.TeamName.ToLower() == teamDto.TeamName.ToLower());
-        if (team != null) return BadRequest("Team already exists");
+        if (team != null) return GetStatus(StatusCodes.Status404NotFound, "Team already exists");
 
         Team newTeam = new()
         {
@@ -43,9 +45,9 @@ public class TeamController : BaseController
         };
         _unitOfWork.Team.Add(newTeam);
         if (await _unitOfWork.Complete())
-            return Ok("Team saved successfully");
+            return GetStatus(StatusCodes.Status200OK, "Team saved successfully");
 
-        return BadRequest("Failed to save team");
+        return GetStatus(StatusCodes.Status400BadRequest, "Failed to save team");
     }
 
     [HttpPut]
@@ -53,28 +55,28 @@ public class TeamController : BaseController
     {
         var team = await _unitOfWork.Team.GetFirstOrDefault(p => p.Id == teamDto.Id);
 
-        if (team == null) return NotFound();
+        if (team == null) return GetStatus(StatusCodes.Status404NotFound, $"Team with Id - {teamDto.Id} not found");
 
-        team = _mapper.Map<Team>(teamDto);
+        _mapper.Map(teamDto, team);
 
         _unitOfWork.Team.Update(team);
         if (await _unitOfWork.Complete())
-            return Ok("Team updated successfully");
+            return GetStatus(StatusCodes.Status200OK, "Team updated successfully");
 
-        return BadRequest("Failed to updated team");
+        return GetStatus(StatusCodes.Status400BadRequest, "Failed to updated team");
     }
 
-    [HttpPost("id")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         var team = await _unitOfWork.Team.GetFirstOrDefault(p => p.Id == id);
 
-        if (team == null) return NotFound();
+        if (team == null) return GetStatus(StatusCodes.Status404NotFound, string.Empty);
 
         _unitOfWork.Team.Remove(team);
         if (await _unitOfWork.Complete())
-            return Ok("Team deleted successfully");
+            return GetStatus(StatusCodes.Status200OK, "Team deleted successfully");
 
-        return BadRequest("Failed to delete team");
+        return GetStatus(StatusCodes.Status400BadRequest, "Failed to delete team");
     }
 }

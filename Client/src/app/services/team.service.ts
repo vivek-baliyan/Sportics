@@ -11,11 +11,11 @@ export class TeamService {
   constructor(private http: HttpClient) {}
 
   getTeam(id: number) {
-    return this.http.get<Team>(this.baseUrl + 'team/' + id);
+    return this.http.get(this.baseUrl + 'team/' + id);
   }
 
   getTeams() {
-    return this.http.get<Team[]>(this.baseUrl + 'team');
+    return this.http.get(this.baseUrl + 'team');
   }
 
   createTeam(team: Team) {

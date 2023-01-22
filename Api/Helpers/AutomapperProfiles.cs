@@ -8,7 +8,9 @@ namespace Api.Helpers
     {
         public AutoMapperProfiles()
         {
+            CreateMap<TeamDto, Team>();
             CreateMap<Team, TeamDto>();
+            CreateMap<PlayerDto, Player>();
             CreateMap<Player, PlayerDto>()
             .ForMember(dest => dest.TeamName, opts =>
             {

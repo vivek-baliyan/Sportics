@@ -11,11 +11,11 @@ export class PlayerService {
   constructor(private http: HttpClient) {}
 
   getPlayer(id: number) {
-    return this.http.get<Player>(this.baseUrl + 'player/' + id);
+    return this.http.get(this.baseUrl + 'player/' + id);
   }
 
   getPlayers() {
-    return this.http.get<Player[]>(this.baseUrl + 'player');
+    return this.http.get(this.baseUrl + 'player');
   }
 
   createPlayer(player: Player) {

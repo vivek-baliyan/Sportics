@@ -17,8 +17,8 @@ export class PlayerListComponent implements OnInit {
   }
 
   getPlayers() {
-    this.playerService.getPlayers().subscribe((response) => {
-      this.players = response;
+    this.playerService.getPlayers().subscribe((response: any) => {
+      this.players = response.data;
     });
   }
 }

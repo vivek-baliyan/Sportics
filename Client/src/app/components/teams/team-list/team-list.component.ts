@@ -17,8 +17,15 @@ export class TeamListComponent implements OnInit {
   }
 
   getTeams() {
-    this.teamService.getTeams().subscribe((response) => {
-      this.teams = response;
+    this.teamService.getTeams().subscribe((response: any) => {
+      this.teams = response.data;
+    });
+  }
+
+  deleteTeam(id: number) {
+    this.teamService.deleteTeam(id).subscribe((response: any) => {
+      console.log(response.msg);
+      this.teams = this.teams.filter((t) => t.id !== id);
     });
   }
 }
