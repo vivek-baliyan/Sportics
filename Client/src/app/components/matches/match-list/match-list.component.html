@@ -1,7 +1,11 @@
 <div class="container mt-4">
   <div class="row clearfix">
     <div class="col mb-3">
-      <button type="button" routerLink="/player/create" class="btn btn-primary btn-sm float-right">
+      <button
+        type="button"
+        routerLink="/match/create"
+        class="btn btn-primary btn-sm float-right"
+      >
         New +
       </button>
     </div>
@@ -12,24 +16,28 @@
         <thead>
           <tr>
             <th class="text-center" style="width: 50px">#</th>
-            <th>Player</th>
+            <th>Match</th>
+            <th>Home Team</th>
+            <th>Away Team</th>
             <th class="text-center" style="width: 130px">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let player of players; let i = index">
+          <tr *ngFor="let match of matches; let i = index">
             <td class="text-center">{{ i + 1 }}</td>
-            <td>{{ player.firstName + " " + player.lastName }}</td>
+            <td>{{ match.matchNo }}</td>
+            <td>{{ match.teams[0]?.teamName }}</td>
+            <td>{{ match.teams[1]?.teamName }}</td>
             <td class="text-center">
               <button
-                routerLink="/player/create/{{ player.id }}"
+                routerLink="/match/create/{{ match.id }}"
                 class="btn btn-primary btn-sm mx-1"
               >
                 Edit
               </button>
               <button
                 class="btn btn-danger btn-sm mx-1"
-                (click)="deletePlayer(player.id)"
+                (click)="deleteMatch(match.id)"
               >
                 Delete
               </button>

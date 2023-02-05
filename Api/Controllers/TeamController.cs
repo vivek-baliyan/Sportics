@@ -37,7 +37,7 @@ public class TeamController : BaseController
     public async Task<IActionResult> Post(TeamDto teamDto)
     {
         var team = await _unitOfWork.Team.GetFirstOrDefault(t => t.TeamName.ToLower() == teamDto.TeamName.ToLower());
-        if (team != null) return GetStatus(StatusCodes.Status404NotFound, "Team already exists");
+        if (team != null) return GetStatus(StatusCodes.Status400BadRequest, "Team already exists");
 
         Team newTeam = new()
         {
@@ -71,7 +71,7 @@ public class TeamController : BaseController
     {
         var team = await _unitOfWork.Team.GetFirstOrDefault(p => p.Id == id);
 
-        if (team == null) return GetStatus(StatusCodes.Status404NotFound, string.Empty);
+        if (team == null) return GetStatus(StatusCodes.Status404NotFound, $"Team with Id - {id} not found");
 
         _unitOfWork.Team.Remove(team);
         if (await _unitOfWork.Complete())

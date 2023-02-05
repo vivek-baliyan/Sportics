@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Player } from 'src/app/models/player';
 import { Team } from 'src/app/models/team';
 import { PlayerService } from 'src/app/services/player.service';
@@ -19,7 +20,9 @@ export class PlayerCreateComponent implements OnInit {
   constructor(
     private playerService: PlayerService,
     private teamService: TeamService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -33,7 +36,6 @@ export class PlayerCreateComponent implements OnInit {
     this.getTeams();
 
     this.route.data.subscribe((response) => {
-      console.log(response);
       if (Object.keys(response).length > 0) this.player = response.player.data;
       if (this.player != undefined && this.player != null) this.setPlayer();
     });
@@ -62,20 +64,34 @@ export class PlayerCreateComponent implements OnInit {
   }
 
   createPlayer() {
-    this.playerService
-      .createPlayer(this.playerForm.value)
-      .subscribe((response) => {
-        console.log(response);
+    this.playerService.createPlayer(this.playerForm.value).subscribe({
+      next: (response) => {
+        this.toastr.success(response.msg);
         this.playerForm.reset();
-      });
+        this.playerForm.setValue({
+          id: 0,
+          firstName: '',
+          lastName: '',
+          teamId: 0,
+        });
+      },
+      error: (err) => {
+        this.toastr.error(err.error.msg);
+        console.log(err.error.msg);
+      },
+    });
   }
 
   updatePlayer() {
-    this.playerService
-      .updatePlayer(this.playerForm.value)
-      .subscribe((response) => {
-        console.log(response);
-        this.playerForm.reset();
-      });
+    this.playerService.updatePlayer(this.playerForm.value).subscribe({
+      next: (response) => {
+        this.toastr.success(response.msg);
+        this.router.navigate(['/player/create']);
+      },
+      error: (err) => {
+        this.toastr.error(err.error.msg);
+        console.log(err.error.msg);
+      },
+    });
   }
 }

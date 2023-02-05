@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Api.Dtos;
-using Api.Entities;
 using Api.Repository.Interface;
 using AutoMapper;
 using Api.Dtos.Match;
@@ -22,14 +20,14 @@ public class MatchController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetMatchs()
     {
-        var matches = await _unitOfWork.Match.GetAll("Teams");
+        var matches = await _unitOfWork.Match.GetAll("Teams,Teams.Team");
         return GetStatus(StatusCodes.Status200OK, string.Empty, _mapper.Map<IEnumerable<MatchDto>>(matches));
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMatch(int id)
     {
-        var match = await _unitOfWork.Match.GetFirstOrDefault(p => p.Id == id);
+        var match = await _unitOfWork.Match.GetFirstOrDefault(p => p.Id == id, "Teams");
         if (match == null) return GetStatus(StatusCodes.Status404NotFound, $"Match with Id - {id} not found");
 
         return GetStatus(StatusCodes.Status200OK, string.Empty, _mapper.Map<MatchDto>(match));
@@ -39,7 +37,7 @@ public class MatchController : BaseController
     public async Task<IActionResult> Post(MatchDto matchDto)
     {
         var match = await _unitOfWork.Match.GetFirstOrDefault(t => t.MatchNo == matchDto.MatchNo);
-        if (match != null) return GetStatus(StatusCodes.Status404NotFound, "Match already exists");
+        if (match != null) return GetStatus(StatusCodes.Status400BadRequest, "Match already exists");
 
         Match newMatch = new()
         {
@@ -89,7 +87,7 @@ public class MatchController : BaseController
     {
         var Match = await _unitOfWork.Match.GetFirstOrDefault(p => p.Id == id);
 
-        if (Match == null) return GetStatus(StatusCodes.Status404NotFound, string.Empty);
+        if (Match == null) return GetStatus(StatusCodes.Status404NotFound, $"Match with Id - {id} not found");
 
         _unitOfWork.Match.Remove(Match);
         if (await _unitOfWork.Complete())

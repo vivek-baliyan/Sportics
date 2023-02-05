@@ -2,6 +2,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +13,9 @@ import { TeamCreateComponent } from './components/teams/team-create/team-create.
 import { TeamListComponent } from './components/teams/team-list/team-list.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavComponent } from './components/nav/nav.component';
+import { ToastrModule } from 'ngx-toastr';
+import { MatchListComponent } from './components/matches/match-list/match-list.component';
+import { MatchCreateComponent } from './components/matches/match-create/match-create.component';
 
 @NgModule({
   declarations: [
@@ -21,14 +26,21 @@ import { NavComponent } from './components/nav/nav.component';
     PlayerCreateComponent,
     HomeComponent,
     NavComponent,
+    MatchListComponent,
+    MatchCreateComponent,
   ],
   imports: [
     BrowserModule,
+    CommonModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+    }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
