@@ -26,8 +26,8 @@
           <tr *ngFor="let match of matches; let i = index">
             <td class="text-center">{{ i + 1 }}</td>
             <td>{{ match.matchNo }}</td>
-            <td>{{ match.teams[0]?.teamName }}</td>
-            <td>{{ match.teams[1]?.teamName }}</td>
+            <td>{{ match.team1Name }}</td>
+            <td>{{ match.team2Name }}</td>
             <td class="text-center">
               <button
                 routerLink="/match/create/{{ match.id }}"

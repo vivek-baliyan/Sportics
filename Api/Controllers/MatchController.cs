@@ -18,16 +18,16 @@ public class MatchController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetMatchs()
+    public async Task<IActionResult> GetMatches()
     {
-        var matches = await _unitOfWork.Match.GetAll("Teams,Teams.Team");
+        var matches = await _unitOfWork.Match.GetAll("Team1,Team2");
         return GetStatus(StatusCodes.Status200OK, string.Empty, _mapper.Map<IEnumerable<MatchDto>>(matches));
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMatch(int id)
     {
-        var match = await _unitOfWork.Match.GetFirstOrDefault(p => p.Id == id, "Teams");
+        var match = await _unitOfWork.Match.GetFirstOrDefault(p => p.Id == id);
         if (match == null) return GetStatus(StatusCodes.Status404NotFound, $"Match with Id - {id} not found");
 
         return GetStatus(StatusCodes.Status200OK, string.Empty, _mapper.Map<MatchDto>(match));
@@ -41,11 +41,14 @@ public class MatchController : BaseController
 
         Match newMatch = new()
         {
-            MatchNo = matchDto.MatchNo
+            MatchNo = matchDto.MatchNo,
+            MatchDate = matchDto.MatchDate,
+            Venue = matchDto.Venue,
+            Team1Id = matchDto.Team1Id,
+            Team2Id = matchDto.Team2Id,
+            TournamentId = matchDto.TournamentId
         };
         _unitOfWork.Match.Add(newMatch);
-
-        await _unitOfWork.Complete();
 
         if (await _unitOfWork.Complete())
             return GetStatus(StatusCodes.Status200OK, "Match saved successfully");

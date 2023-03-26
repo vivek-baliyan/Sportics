@@ -38,7 +38,10 @@ public class PlayerController : BaseController
     {
         Player newPlayer = new()
         {
-            Name = playerDto.Name,
+            FirstName = playerDto.FirstName,
+            LastName = playerDto.LastName,
+            Nationality = playerDto.Nationality,
+            Role = playerDto.Role,
             TeamId = playerDto.TeamId
         };
         _unitOfWork.Player.Add(newPlayer);

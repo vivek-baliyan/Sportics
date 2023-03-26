@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { Match } from 'src/app/models/Match/match';
+import { Match } from 'src/app/models/match/match';
 import { MatchService } from 'src/app/services/match.service';
 
 @Component({

@@ -1,47 +1,80 @@
 <div class="container mt-4">
-    <form [formGroup]="matchForm" (submit)="onSubmit()">
-      <div class="row mb-3">
-        <div class="col">
-          <label for="txtFirstName" class="form-label">Match No.</label>
-          <input
-            type="text"
-            class="form-control"
-            id="txtMatchNo"
-            formControlName="matchNo"
-          />
-        </div>
+  <form [formGroup]="matchForm" (submit)="onSubmit()">
+    <div class="row mb-3">
+      <div class="col">
+        <label for="txtMatchNo" class="form-label">Match No.</label>
+        <input
+          type="text"
+          class="form-control"
+          id="txtMatchNo"
+          formControlName="matchNo"
+        />
       </div>
-      <div class="row mb-3">
-        <div class="col-6">
-            <label for="ddlHomeTeam" class="form-label">Home Team</label>
-            <select
-              type="text"
-              class="form-select"
-              id="ddlHomeTeam"
-              formControlName="homeTeamId"
-            >
-              <option value="0">-Select-</option>
-              <option *ngFor="let team of teams" value="{{ team.id }}">
-                {{ team.teamName }}
-              </option>
-            </select>
-          </div>
-        <div class="col-6">
-          <label for="ddlAwayTeam" class="form-label">Away Team</label>
-          <select
-            type="text"
-            class="form-select"
-            id="ddlAwayTeam"
-            formControlName="awayTeamId"
-          >
-            <option value="0">-Select-</option>
-            <option *ngFor="let team of teams" value="{{ team.id }}">
-              {{ team.teamName }}
-            </option>
-          </select>
-        </div>
+      <div class="col">
+        <label for="txtMatchDate" class="form-label">Match Date</label>
+        <input
+          type="text"
+          class="form-control"
+          id="txtMatchDate"
+          formControlName="matchDate"
+        />
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-  </div>
-  
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <label for="ddlTournament" class="form-label">Tournament</label>
+        <select
+          type="text"
+          class="form-select"
+          id="ddlTournament"
+          formControlName="tournamentId"
+        >
+          <option value="0">-Select-</option>
+          <option *ngFor="let tournament of tournaments" value="{{ tournament.id }}">
+            {{ tournament.tournamentName }}
+          </option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="txtVenue" class="form-label">Venue</label>
+        <input
+          type="text"
+          class="form-control"
+          id="txtVenue"
+          formControlName="venue"
+        />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-6">
+        <label for="ddlTeam1" class="form-label">Team 1</label>
+        <select
+          type="text"
+          class="form-select"
+          id="ddlTeam1"
+          formControlName="team1Id"
+        >
+          <option value="0">-Select-</option>
+          <option *ngFor="let team of teams" value="{{ team.id }}">
+            {{ team.teamName }}
+          </option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label for="ddlTeam2" class="form-label">Team 2</label>
+        <select
+          type="text"
+          class="form-select"
+          id="ddlTeam2"
+          formControlName="team2Id"
+        >
+          <option value="0">-Select-</option>
+          <option *ngFor="let team of teams" value="{{ team.id }}">
+            {{ team.teamName }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>

@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Player } from 'src/app/models/player';
@@ -27,14 +33,16 @@ export class PlayerCreateComponent implements OnInit {
 
   ngOnInit() {
     this.playerForm = new FormGroup({
-      id: new FormControl(0),
+      id: new FormControl<number>(null),
       firstName: new FormControl(null, [Validators.required]),
       lastName: new FormControl(null),
-      teamId: new FormControl(0),
+      nationality: new FormControl(null),
+      role: new FormControl(null),
+      teamId: new FormControl<number>(0),
     });
 
     this.getTeams();
-
+    
     this.route.data.subscribe((response) => {
       if (Object.keys(response).length > 0) this.player = response.player.data;
       if (this.player != undefined && this.player != null) this.setPlayer();
@@ -46,6 +54,8 @@ export class PlayerCreateComponent implements OnInit {
       id: this.player.id,
       firstName: this.player.firstName,
       lastName: this.player.lastName,
+      nationality: this.player.nationality,
+      role: this.player.role,
       teamId: this.player.teamId,
     });
   }
@@ -58,22 +68,22 @@ export class PlayerCreateComponent implements OnInit {
 
   onSubmit() {
     if (this.playerForm.valid) {
-      if (this.player == undefined) this.createPlayer();
-      else this.updatePlayer();
+      if (this.playerForm.valid) {
+        const formValue = this.playerForm.value;
+        if (!formValue.id) {
+          formValue.id = 0; // Assign a default value to the id field
+        }
+        if (this.player == undefined) this.createPlayer(formValue);
+        else this.updatePlayer(formValue);
+      }
     }
   }
 
-  createPlayer() {
-    this.playerService.createPlayer(this.playerForm.value).subscribe({
+  createPlayer(formValue: any) {
+    this.playerService.createPlayer(formValue).subscribe({
       next: (response) => {
         this.toastr.success(response.msg);
-        this.playerForm.reset();
-        this.playerForm.setValue({
-          id: 0,
-          firstName: '',
-          lastName: '',
-          teamId: 0,
-        });
+        this.resetForm();
       },
       error: (err) => {
         this.toastr.error(err.error.msg);
@@ -82,8 +92,8 @@ export class PlayerCreateComponent implements OnInit {
     });
   }
 
-  updatePlayer() {
-    this.playerService.updatePlayer(this.playerForm.value).subscribe({
+  updatePlayer(formValue: any) {
+    this.playerService.updatePlayer(formValue).subscribe({
       next: (response) => {
         this.toastr.success(response.msg);
         this.router.navigate(['/player/create']);
@@ -92,6 +102,13 @@ export class PlayerCreateComponent implements OnInit {
         this.toastr.error(err.error.msg);
         console.log(err.error.msg);
       },
+    });
+  }
+
+  resetForm() {
+    this.playerForm.reset({
+      id: 0,
+      teamId: 0,
     });
   }
 }

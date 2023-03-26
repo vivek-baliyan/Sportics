@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Match } from 'src/app/models/Match/match';
+import { Match } from 'src/app/models/match/match';
 import { Team } from 'src/app/models/team';
+import { Tournament } from 'src/app/models/tournament/tournament';
 import { MatchService } from 'src/app/services/match.service';
 import { TeamService } from 'src/app/services/team.service';
+import { TournamentService } from 'src/app/services/tournament.service';
 
 @Component({
   selector: 'app-match-create',
@@ -15,11 +17,13 @@ import { TeamService } from 'src/app/services/team.service';
 export class MatchCreateComponent implements OnInit {
   matchForm: FormGroup;
   teams: Team[];
+  tournaments: Tournament[];
   match: Match;
 
   constructor(
     private matchService: MatchService,
     private teamService: TeamService,
+    private tournamentService:TournamentService,
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService
@@ -29,11 +33,15 @@ export class MatchCreateComponent implements OnInit {
     this.matchForm = new FormGroup({
       id: new FormControl(0),
       matchNo: new FormControl(null, [Validators.required]),
-      homeTeamId: new FormControl(0),
-      awayTeamId: new FormControl(0),
+      matchDate: new FormControl(new Date(), [Validators.required]),
+      venue: new FormControl(null, [Validators.required]),
+      team1Id: new FormControl(0),
+      team2Id: new FormControl(0),
+      tournamentId: new FormControl(0),
     });
 
     this.getTeams();
+    this.getTournaments();
 
     this.route.data.subscribe((response) => {
       if (Object.keys(response).length > 0) this.match = response.match.data;
@@ -45,14 +53,23 @@ export class MatchCreateComponent implements OnInit {
     this.matchForm.setValue({
       id: this.match.id,
       matchNo: this.match.matchNo,
-      homeTeamId: isNaN(this.match.teams[0]?.teamId) ? 0 : this.match.teams[0]?.teamId,
-      awayTeamId: isNaN(this.match.teams[1]?.teamId) ? 0 : this.match.teams[1]?.teamId,
+      matchDate: this.match.matchDate,
+      venue: this.match.venue,
+      team1Id: this.match.team1Id,
+      team2Id: this.match.team2Id,
+      tournamentId:this.match.tournamentId
     });
   }
 
   getTeams() {
     this.teamService.getTeams().subscribe((response) => {
       this.teams = response.data;
+    });
+  }
+  
+  getTournaments() {
+    this.tournamentService.getTournamentes().subscribe((response) => {
+      this.tournaments = response.data;
     });
   }
 
@@ -64,38 +81,10 @@ export class MatchCreateComponent implements OnInit {
   }
 
   createMatch() {
-    var newMatch: Match = {
-      id: 0,
-      matchNo: 0,
-      manOfMatch: 0,
-      teams: [
-        {
-          id: 0,
-          tossWon: false,
-          matchWon: false,
-          teamId: this.matchForm.value.homeTeamId,
-          teamName: '',
-        },
-        {
-          id: 0,
-          tossWon: false,
-          matchWon: false,
-          teamId: this.matchForm.value.awayTeamId,
-          teamName: '',
-        },
-      ],
-      innings: [],
-    };
-    this.matchService.createMatch(newMatch).subscribe({
+    this.matchService.createMatch(this.matchForm.value).subscribe({
       next: (response) => {
         this.toastr.success(response.msg);
         this.matchForm.reset();
-        this.matchForm.setValue({
-          id: 0,
-          firstName: '',
-          lastName: '',
-          teamId: 0,
-        });
       },
       error: (err) => {
         this.toastr.error(err.error.msg);
@@ -105,30 +94,7 @@ export class MatchCreateComponent implements OnInit {
   }
 
   updateMatch() {
-    var updateMatch: Match = {
-      id: this.matchForm.value.id,
-      matchNo: this.matchForm.value.matchNo,
-      manOfMatch: 0,
-      teams: [
-        {
-          id: 0,
-          tossWon: false,
-          matchWon: false,
-          teamId: this.matchForm.value.homeTeamId,
-          teamName: '',
-        },
-        {
-          id: 0,
-          tossWon: false,
-          matchWon: false,
-          teamId: this.matchForm.value.awayTeamId,
-          teamName: '',
-        },
-      ],
-      innings: [],
-    };
-
-    this.matchService.updateMatch(updateMatch).subscribe({
+    this.matchService.updateMatch(this.matchForm.value).subscribe({
       next: (response) => {
         this.toastr.success(response.msg);
         this.router.navigate(['/match/create']);

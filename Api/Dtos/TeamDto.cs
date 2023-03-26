@@ -1,10 +1,10 @@
-namespace Api.Entities;
+namespace Api.Dtos;
 
-public class Team
+public class TeamDto
 {
     public int Id { get; set; }
     public string TeamName { get; set; } = string.Empty;
     public string HomeCity { get; set; } = string.Empty;
     public string Coach { get; set; } = string.Empty;
-    public virtual ICollection<Player>? Players { get; set; }
+    public virtual ICollection<PlayerDto>? Players { get; set; }
 }

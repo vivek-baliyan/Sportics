@@ -1,9 +1,8 @@
-using Api.Entities.Match;
-using Api.Helpers;
+using Api.Dtos.Match;
 
-namespace Api.Entities;
+namespace Api.Dtos;
 
-public class Player
+public class PlayerDto
 {
     public int Id { get; set; }
     public string FirstName { get; set; } = string.Empty;
@@ -11,6 +10,6 @@ public class Player
     public string Nationality { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
     public int TeamId { get; set; }
-    public virtual Team? Team { get; set; }
-    public virtual ICollection<MatchPlayerStatistic>? MatchPlayerStatistics { get; set; }
+    public string TeamName { get; set; } = string.Empty;
+    public virtual ICollection<MatchPlayerStatisticDto>? MatchPlayerStatistics { get; set; }
 }

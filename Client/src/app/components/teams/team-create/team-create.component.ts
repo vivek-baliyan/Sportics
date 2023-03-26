@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Team } from 'src/app/models/team';
@@ -15,6 +20,7 @@ export class TeamCreateComponent implements OnInit {
   team: Team;
 
   constructor(
+    private formBuilder: FormBuilder,
     private teamService: TeamService,
     private route: ActivatedRoute,
     private router: Router,
@@ -22,9 +28,11 @@ export class TeamCreateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.teamForm = new FormGroup({
-      id: new FormControl(0),
-      teamName: new FormControl(null, [Validators.required]),
+    this.teamForm = this.formBuilder.group({
+      id: [0],
+      teamName: [null, [Validators.required]],
+      homeCity: [null, [Validators.required]],
+      coach: [null, [Validators.required]],
     });
 
     this.route.data.subscribe((response) => {
@@ -34,18 +42,27 @@ export class TeamCreateComponent implements OnInit {
   }
 
   setTeam() {
-    this.teamForm.setValue({ id: this.team.id, teamName: this.team.teamName });
+    this.teamForm.setValue({
+      id: this.team.id,
+      teamName: this.team.teamName,
+      homeCity: this.team.homeCity,
+      coach: this.team.coach,
+    });
   }
 
   onSubmit() {
     if (this.teamForm.valid) {
-      if (this.team == undefined) this.createTeam();
-      else this.updateTeam();
+      const formValue = this.teamForm.value;
+      if (!formValue.id) {
+        formValue.id = 0; // Assign a default value to the id field
+      }
+      if (this.team == undefined) this.createTeam(formValue);
+      else this.updateTeam(formValue);
     }
   }
 
-  createTeam() {
-    this.teamService.createTeam(this.teamForm.value).subscribe({
+  createTeam(formValue: any) {
+    this.teamService.createTeam(formValue).subscribe({
       next: (response) => {
         this.toastr.success(response.msg);
         this.teamForm.reset();
@@ -57,8 +74,8 @@ export class TeamCreateComponent implements OnInit {
     });
   }
 
-  updateTeam() {
-    this.teamService.updateTeam(this.teamForm.value).subscribe({
+  updateTeam(formValue: any) {
+    this.teamService.updateTeam(formValue).subscribe({
       next: (response) => {
         this.toastr.success(response.msg);
         this.router.navigate(['/team/create']);

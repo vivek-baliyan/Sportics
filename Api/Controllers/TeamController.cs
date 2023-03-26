@@ -36,12 +36,14 @@ public class TeamController : BaseController
     [HttpPost]
     public async Task<IActionResult> Post(TeamDto teamDto)
     {
-        var team = await _unitOfWork.Team.GetFirstOrDefault(t => t.Name.ToLower() == teamDto.Name.ToLower());
+        var team = await _unitOfWork.Team.GetFirstOrDefault(t => t.TeamName.ToLower() == teamDto.TeamName.ToLower());
         if (team != null) return GetStatus(StatusCodes.Status400BadRequest, "Team already exists");
 
         Team newTeam = new()
         {
-            Name = teamDto.Name
+            TeamName = teamDto.TeamName,
+            HomeCity = teamDto.HomeCity,
+            Coach = teamDto.Coach
         };
         _unitOfWork.Team.Add(newTeam);
         if (await _unitOfWork.Complete())

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Match } from '../models/Match/match';
+import { Match } from '../models/match/match';
 
 @Injectable({
   providedIn: 'root',
