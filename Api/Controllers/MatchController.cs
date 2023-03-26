@@ -47,19 +47,6 @@ public class MatchController : BaseController
 
         await _unitOfWork.Complete();
 
-        if (matchDto != null && matchDto.Teams != null)
-        {
-            foreach (var team in matchDto.Teams)
-            {
-                MatchTeam newMatchTeam = new()
-                {
-                    MatchId = newMatch.Id,
-                    TeamId = team.TeamId
-                };
-                _unitOfWork.MatchTeam.Add(newMatchTeam);
-            }
-        }
-
         if (await _unitOfWork.Complete())
             return GetStatus(StatusCodes.Status200OK, "Match saved successfully");
 

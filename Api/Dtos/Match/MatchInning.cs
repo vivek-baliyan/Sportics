@@ -1,6 +1,6 @@
 namespace Api.Dtos.Match;
 
-public class MatchInningDto
+public class InningDto
 {
     public int Id { get; set; }
     public int InnningNo { get; set; }

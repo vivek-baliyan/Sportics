@@ -4,7 +4,7 @@ public interface IUnitOfWork
 {
     IPlayerRepository Player { get; }
     ITeamRepository Team { get; }
+    ITournamentRepository Tournament { get; }
     IMatchRepository Match { get; }
-    IMatchTeamRepository MatchTeam { get; }
     Task<bool> Complete();
 }
